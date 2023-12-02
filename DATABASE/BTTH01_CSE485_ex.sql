@@ -44,7 +44,19 @@ WHERE (ten_bhat OR tieude LIKE '%yêu%') OR (ten_bhat or tieude like '%thương%
 -- j
 
 -- k
-ALTER TABLE theloai ADD SLBaiViet int;
+
+ALTER TABLE theloai
+ADD COLUMN SLBaiViet INT NOT NULL DEFAULT 0;
+CREATE TRIGGER tg_CapNhatTheLoai
+AFTER INSERT OR UPDATE OR DELETE ON baiviet
+FOR EACH ROW
+BEGIN
+  IF (NEW.TheLoaiID IS NOT NULL) THEN
+    UPDATE theloai
+    SET SLBaiViet = SLBaiViet + 1
+    WHERE TheLoaiID = NEW.TheLoaiID;
+  END IF;
+END;
 
 -- l
 CREATE TABLE `users` (
