@@ -39,10 +39,33 @@ SELECT * FROM baiviet
 WHERE (ten_bhat OR tieude LIKE '%yêu%') OR (ten_bhat or tieude like '%thương%') OR (ten_bhat OR tieude LIKE '%anh%') OR (ten_bhat OR tieude LIKE '%em%');
 
 -- i
-
+CREATE VIEW vw_Music AS
+SELECT
+  b.id,
+  b.tieude,
+  b.tomtat,
+  b.noidung,
+  b.tacgia,
+  b.ngaydang,
+  t.theloai
+FROM baiviet b
+INNER JOIN theloai t
+ON b.theloaiid = t.id;
 
 -- j
-
+CREATE PROCEDURE sp_DSBaiViet
+(
+  @TenTheLoai VARCHAR(255)
+)
+AS
+BEGIN
+  
+  SELECT *
+  FROM theloai
+  WHERE theloai = @TenTheLoai;
+  IF (@@ROWCOUNT = 0) THEN
+    RAISERROR('Thể loại không tồn tại!', 16, 1);
+  END IF;
 -- k
 
 ALTER TABLE theloai
